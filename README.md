@@ -69,6 +69,9 @@
 
 ## About The Project
 
+![MediBox-Prototype](https://github.com/ShavinAnjithaAlpha/MediBox/assets/85817726/b7886acb-d78e-4fc0-92b0-5a9dfb8da392)
+
+
 Smart MediBox is a IoT product that helps you to manage your medicine box. It will manage your medicine through a web interface enabling the full power of IoT. You can observe real-time statictics of your medicine box and get notified when when environment is not suitable for your medicine.
 
 _This project is developed as the module project of the Embedded System and Application Module of the Department of Electronic and Telecommunication Engineering, **University of Moratuwa**._
@@ -132,6 +135,11 @@ This is an example of how to list things you need to use the software and how to
 ## Usage
 
 Here is the NodeRed flow diagram used to developed the program for IoT part of the MediBox.
+
+![NodeRed-flow-1](https://github.com/ShavinAnjithaAlpha/MediBox/assets/85817726/a6b202d7-52dd-40b9-99cc-30e2389c886a)
+![NodeRed-flow-2](https://github.com/ShavinAnjithaAlpha/MediBox/assets/85817726/e8990e4d-6bea-49af-a16e-95a036b41b4a)
+![Nodered-dashboard](https://github.com/ShavinAnjithaAlpha/MediBox/assets/85817726/18d5b629-1aa3-496e-8663-5170c216cd6e)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
