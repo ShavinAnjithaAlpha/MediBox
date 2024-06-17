@@ -1,0 +1,903 @@
+[
+    {
+        "id": "0d1afeb5bb1c03eb",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "113951e5f115b0ae",
+        "type": "mqtt in",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Left LDR",
+        "topic": "SHAVIN-LEFT-LDR",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8408837122bcc497",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "80c78a9ffc5aacb5"
+            ]
+        ]
+    },
+    {
+        "id": "f7a2106464804c67",
+        "type": "mqtt in",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Right LDR",
+        "topic": "SHAVIN-RIGHT-LDR",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8408837122bcc497",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 160,
+        "y": 280,
+        "wires": [
+            [
+                "a72efb4a2d9094aa",
+                "90b5fefa1d74e2e1"
+            ]
+        ]
+    },
+    {
+        "id": "80c78a9ffc5aacb5",
+        "type": "range",
+        "z": "0d1afeb5bb1c03eb",
+        "minin": "0",
+        "maxin": "4063",
+        "minout": "0",
+        "maxout": "1",
+        "action": "scale",
+        "round": false,
+        "property": "payload",
+        "name": "Left LDR scaling",
+        "x": 360,
+        "y": 120,
+        "wires": [
+            [
+                "259c423459aced8d",
+                "5e74a11e3b4a69b0"
+            ]
+        ]
+    },
+    {
+        "id": "a72efb4a2d9094aa",
+        "type": "range",
+        "z": "0d1afeb5bb1c03eb",
+        "minin": "0",
+        "maxin": "4063",
+        "minout": "0",
+        "maxout": "1",
+        "action": "scale",
+        "round": false,
+        "property": "payload",
+        "name": "Right LDR scaling",
+        "x": 370,
+        "y": 280,
+        "wires": [
+            [
+                "68e5812d95d6e3f2",
+                "32e89bd38cf658ee"
+            ]
+        ]
+    },
+    {
+        "id": "259c423459aced8d",
+        "type": "debug",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Ledt LDR scaled",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 610,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "68e5812d95d6e3f2",
+        "type": "debug",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Right LDR scaled",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "90b5fefa1d74e2e1",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Calculate Max Intensity",
+        "func": "const leftValue = parseFloat(flow.get(\"LEFT-LDR\"));\nconst rightValue = parseFloat(flow.get(\"RIGHT-LDR\"));\n\nif (leftValue > rightValue) return {\n    payload: leftValue,\n    from_: \"LEFT\"\n};\nreturn {\n    payload: rightValue,\n    from_ : \"RIGHT\"\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 170,
+        "y": 460,
+        "wires": [
+            [
+                "3625b38a81185c87",
+                "5608a893242b52d0",
+                "235e45e78e4d2e47",
+                "46a8c46565bd8bba",
+                "5a1b9d397516a7ea",
+                "40176dbe5b7a5f21"
+            ]
+        ]
+    },
+    {
+        "id": "46a8c46565bd8bba",
+        "type": "ui_gauge",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Light Intensity",
+        "group": "0a2750e3ed31e56b",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Light Intensity",
+        "label": "units",
+        "format": "{{payload}}",
+        "min": 0,
+        "max": "1.0",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 720,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "3625b38a81185c87",
+        "type": "ui_chart",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Live Light Intensity Chart",
+        "group": "0a2750e3ed31e56b",
+        "order": 3,
+        "width": "0",
+        "height": "0",
+        "label": "Real-time Light Intensity Chart",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "No Data",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "1",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 750,
+        "y": 440,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5608a893242b52d0",
+        "type": "debug",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "MAX INTENSITY",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "5e74a11e3b4a69b0",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Set Left LDR Value",
+        "func": "flow.set(\"LEFT-LDR\", msg.payload);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "32e89bd38cf658ee",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Set Right LDR Value",
+        "func": "flow.set(\"RIGHT-LDR\", msg.payload);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "235e45e78e4d2e47",
+        "type": "ui_text",
+        "z": "0d1afeb5bb1c03eb",
+        "group": "0a2750e3ed31e56b",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "name": "From Label",
+        "label": "From",
+        "format": "{{msg.from_}}",
+        "layout": "row-left",
+        "className": "",
+        "style": true,
+        "font": "Verdana,Verdana,Geneva,sans-serif",
+        "fontSize": "18",
+        "color": "#3787d2",
+        "x": 510,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "3b4058c0af6b126e",
+        "type": "ui_slider",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Min Angle",
+        "label": "Min. Angle",
+        "tooltip": "Minimum Angle of the motor",
+        "group": "18a486eff392e70e",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "min_angle",
+        "topicType": "msg",
+        "min": 0,
+        "max": "120",
+        "step": 1,
+        "className": "",
+        "x": 840,
+        "y": 780,
+        "wires": [
+            [
+                "0fb33fd8193c946b"
+            ]
+        ]
+    },
+    {
+        "id": "58cb476bc0f2b791",
+        "type": "ui_slider",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Control Value",
+        "label": "Controlling Factor",
+        "tooltip": "Controlling factor of the servo motor angle",
+        "group": "18a486eff392e70e",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "control_value",
+        "topicType": "msg",
+        "min": 0,
+        "max": "1",
+        "step": "0.01",
+        "className": "",
+        "x": 1060,
+        "y": 920,
+        "wires": [
+            [
+                "bd56d0f09ce971fb"
+            ]
+        ]
+    },
+    {
+        "id": "0fb33fd8193c946b",
+        "type": "mqtt out",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Min Angle Topic",
+        "topic": "SHAVIN-MIN-ANGLE",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8408837122bcc497",
+        "x": 1060,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "bd56d0f09ce971fb",
+        "type": "mqtt out",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Control Factor Topic",
+        "topic": "SHAVIN-CONTROL-FACTOR",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8408837122bcc497",
+        "x": 1100,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "2729a25450b17595",
+        "type": "ui_dropdown",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Medicine Option",
+        "label": "Choose Medicine",
+        "tooltip": "most used medicine",
+        "place": "Custom",
+        "group": "b64d821bbdf9af86",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [
+            {
+                "label": "Custom",
+                "value": 0,
+                "type": "num"
+            },
+            {
+                "label": "Tablet A",
+                "value": "1",
+                "type": "str"
+            },
+            {
+                "label": "Tablet B",
+                "value": "2",
+                "type": "str"
+            },
+            {
+                "label": "Tablet C",
+                "value": "3",
+                "type": "str"
+            }
+        ],
+        "payload": "",
+        "topic": "option",
+        "topicType": "msg",
+        "className": "",
+        "x": 160,
+        "y": 920,
+        "wires": [
+            [
+                "92307ce29aa2f172"
+            ]
+        ]
+    },
+    {
+        "id": "2dac4364f3a2b8e4",
+        "type": "mqtt in",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Temperature",
+        "topic": "SHAVIN-TEMP",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8408837122bcc497",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 150,
+        "y": 1020,
+        "wires": [
+            [
+                "ca9a45f1c4e8821c",
+                "c35f7d20fad97d47"
+            ]
+        ]
+    },
+    {
+        "id": "7614ef3b6b209632",
+        "type": "mqtt in",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Humidity",
+        "topic": "SHAVIN-HUMIDITY",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "8408837122bcc497",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 140,
+        "y": 1080,
+        "wires": [
+            [
+                "54239313211e70e0",
+                "389b8dc0ee524bd1"
+            ]
+        ]
+    },
+    {
+        "id": "ca9a45f1c4e8821c",
+        "type": "ui_gauge",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Temperature Gauge",
+        "group": "9fd603e5d3793772",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "compass",
+        "title": "Temperature",
+        "label": "Celcius",
+        "format": "{{payload}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 390,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "54239313211e70e0",
+        "type": "ui_gauge",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Humidity Gauge",
+        "group": "9fd603e5d3793772",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "wave",
+        "title": "Humidity Level",
+        "label": "%",
+        "format": "{{payload}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 380,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "c35f7d20fad97d47",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Average Temperaure",
+        "func": "// calculate the average temp\nflow.set(\"TEMP_COUNT\", flow.get(\"TEMP_COUNT\") + 1);\nflow.set(\"TEMP_SUM\", flow.get(\"TEMP_SUM\") + msg.payload);\n\nreturn {\n    payload: Math.round(flow.get(\"TEMP_SUM\") / flow.get(\"TEMP_COUNT\"), 4)\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "flow.set(\"TEMP_COUNT\", 0);\nflow.set(\"TEMP_SUM\", 0);\n",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 1040,
+        "wires": [
+            [
+                "5e5f24e0abcb741f"
+            ]
+        ]
+    },
+    {
+        "id": "389b8dc0ee524bd1",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Humidity Average",
+        "func": "// calculate the average temp\nflow.set(\"HUMIDITY_COUNT\", flow.get(\"HUMIDITY_COUNT\") + 1);\nflow.set(\"HUMIDITY_SUM\", flow.get(\"HUMIDITY_SUM\") + msg.payload);\n\nreturn {\n    payload: Math.round(flow.get(\"HUMIDITY_SUM\") / flow.get(\"HUMIDITY_COUNT\"), 4)\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "flow.set(\"HUMIDITY_COUNT\", 0);\nflow.set(\"HUMIDITY_SUM\", 0);",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 1160,
+        "wires": [
+            [
+                "a6238ac5990eac5e"
+            ]
+        ]
+    },
+    {
+        "id": "5e5f24e0abcb741f",
+        "type": "ui_text",
+        "z": "0d1afeb5bb1c03eb",
+        "group": "9fd603e5d3793772",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "Temp Label",
+        "label": "Avg. Temperature",
+        "format": "{{msg.payload}} &deg;C",
+        "layout": "col-center",
+        "className": "",
+        "style": true,
+        "font": "Verdana,Verdana,Geneva,sans-serif",
+        "fontSize": 16,
+        "color": "#e41b1b",
+        "x": 830,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "a6238ac5990eac5e",
+        "type": "ui_text",
+        "z": "0d1afeb5bb1c03eb",
+        "group": "9fd603e5d3793772",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "Humidity Label",
+        "label": "Avg. Humidity",
+        "format": "{{msg.payload}} %",
+        "layout": "col-center",
+        "className": "",
+        "style": true,
+        "font": "",
+        "fontSize": 16,
+        "color": "#568be1",
+        "x": 590,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "5a1b9d397516a7ea",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "LDR_D",
+        "func": "if (msg.from_ === \"LEFT\") {\n    return {\n        payload: 1.5\n    }\n} else {\n    return {\n        payload: 0.5\n    }\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 380,
+        "wires": [
+            [
+                "620ab456d2374713"
+            ]
+        ]
+    },
+    {
+        "id": "620ab456d2374713",
+        "type": "mqtt out",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "LDR-D Topic",
+        "topic": "SHAVIN-LDR-D",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8408837122bcc497",
+        "x": 980,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "40176dbe5b7a5f21",
+        "type": "mqtt out",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "MAX INTENSITY Topic",
+        "topic": "SHAVIN-MAX-INTENSITY",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "8408837122bcc497",
+        "x": 860,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "92307ce29aa2f172",
+        "type": "switch",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Option Switch",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 400,
+        "y": 920,
+        "wires": [
+            [
+                "956260410b99e6ee"
+            ],
+            [
+                "c84bb347e3d64586"
+            ],
+            [
+                "d506d244659c68dc"
+            ]
+        ]
+    },
+    {
+        "id": "956260410b99e6ee",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Tablet A",
+        "func": "return {\n    min_angle: 40,\n    control_factor: 0.2\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 880,
+        "wires": [
+            [
+                "973ae77f16db9569",
+                "d070a5e18377ea52"
+            ]
+        ]
+    },
+    {
+        "id": "c84bb347e3d64586",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Tablet B",
+        "func": "return {\n    min_angle: 50,\n    control_factor: 0.3\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 590,
+        "y": 920,
+        "wires": [
+            [
+                "973ae77f16db9569",
+                "d070a5e18377ea52"
+            ]
+        ]
+    },
+    {
+        "id": "d506d244659c68dc",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Tablet C",
+        "func": "return {\n    min_angle: 60,\n    control_factor: 0.4\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 960,
+        "wires": [
+            [
+                "973ae77f16db9569",
+                "d070a5e18377ea52"
+            ]
+        ]
+    },
+    {
+        "id": "973ae77f16db9569",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Min Angle",
+        "func": "return {\n    payload: msg.min_angle\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 860,
+        "wires": [
+            [
+                "3b4058c0af6b126e"
+            ]
+        ]
+    },
+    {
+        "id": "d070a5e18377ea52",
+        "type": "function",
+        "z": "0d1afeb5bb1c03eb",
+        "name": "Control Factor",
+        "func": "return {\n    payload: msg.control_factor\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 940,
+        "wires": [
+            [
+                "58cb476bc0f2b791"
+            ]
+        ]
+    },
+    {
+        "id": "8408837122bcc497",
+        "type": "mqtt-broker",
+        "name": "MQTT Server",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "0a2750e3ed31e56b",
+        "type": "ui_group",
+        "name": "Light Intensity Monitor",
+        "tab": "6601a1d0aafb035a",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "18a486eff392e70e",
+        "type": "ui_group",
+        "name": "Shaded Slider Window",
+        "tab": "6601a1d0aafb035a",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b64d821bbdf9af86",
+        "type": "ui_group",
+        "name": "Medicines",
+        "tab": "6601a1d0aafb035a",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9fd603e5d3793772",
+        "type": "ui_group",
+        "name": "Temperature And Humidity",
+        "tab": "6601a1d0aafb035a",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "6601a1d0aafb035a",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
